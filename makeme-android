@@ -1,0 +1,35 @@
+#!/bin/sh
+
+list()
+{
+	local i=1
+	ls -1 jni/Android*.mk | grep -v Android.mk | while read name; do
+		echo "$i. $name" | grep --color -E "^[0-9]+[.]"
+		i=$((i + 1))
+	done
+}
+
+echo "Select target makefile:" | grep --color "[a-zA-Z]"
+list
+read n
+if [ -z "$n" ]; then
+	echo "canceled" | grep --color "[a-zA-Z]"
+	exit 1
+fi
+file=$(list | grep "$n[.].*" | cut -f2 -d' ')
+cp -v $file jni/Android.mk | grep --color "[a-zA-Z]"
+
+ndk-build clean
+set -e
+ndk-build V=1 -B APP_ABI=armeabi-v7a APP_CFLAGS=-mhard-float APP_LDFLAGS=-Wl,--no-warn-mismatch
+# 2>&1 | tee build.log
+ant debug
+echo -n "Install? [y/n] "
+read a
+if [ -z "$a" -o "$a" == "n" ]; then
+	echo "canceled" | grep --color "[a-zA-Z]"
+	exit 1
+fi
+echo "yes" | grep --color "yes"
+adb shell pm uninstall com.example.tctest
+adb install bin/tctest-debug.apk
