@@ -1,9 +1,14 @@
 #!/bin/sh
 
+if [ -z "$1" ]; then
+	echo "Usage: $(basename $0) <name>"
+	exit 1
+fi
+
 target=$(grep "APP_PLATFORM" jni/Application.mk | cut -f2 -d'=')
 if [ -z "$target" ]; then
 	echo "jni/Application.mk does not specify target"
 	exit 1
 fi
 
-android update project -p . -s -t $target
+android update project -p . -s -t $target -n "$1"
