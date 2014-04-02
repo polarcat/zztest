@@ -17,7 +17,6 @@
 #include <android/log.h>
 #include <android_native_app_glue.h>
 
-#include "lux.h"
 #include "debug.h"
 #include "engine.h"
 #include "sensor.h"
