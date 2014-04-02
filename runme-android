@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ -n "$1" ]; then
+	adb push "$@" /data/local/tmp/$(basename $@)
+fi
+
+echo "To add/replace test data invoke \"$(basename $0) <data>\""
+
+adb shell am force-stop com.example.tctest
+adb shell am start com.example.tctest/android.app.NativeActivity
