@@ -1,10 +1,16 @@
 #!/bin/sh
 
+name()
+{
+	grep -rn "project name" build.xml |
+	sed 's/"//g' | cut -f2 -d'=' | cut -f1 -d' '
+}
+
 if [ -n "$1" ]; then
 	adb push "$@" /data/local/tmp/$(basename $@)
 fi
 
 echo "To add/replace test data invoke \"$(basename $0) <data>\""
 
-adb shell am force-stop com.example.tctest
-adb shell am start com.example.tctest/android.app.NativeActivity
+adb shell am force-stop com.example.$(name)
+adb shell am start com.example.$(name)/android.app.NativeActivity

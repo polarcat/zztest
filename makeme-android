@@ -1,5 +1,11 @@
 #!/bin/sh
 
+name()
+{
+	grep -rn "project name" build.xml |
+	sed 's/"//g' | cut -f2 -d'=' | cut -f1 -d' '
+}
+
 list()
 {
 	local i=1
@@ -31,5 +37,6 @@ if [ -z "$a" -o "$a" == "n" ]; then
 	exit 1
 fi
 echo "yes" | grep --color "yes"
-adb shell pm uninstall com.example.tctest
-adb install bin/tctest-debug.apk
+
+adb shell pm uninstall com.example.$(name)
+adb install bin/$(name)-debug.apk
