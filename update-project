@@ -11,6 +11,8 @@ if [ -z "$target" ]; then
 	exit 1
 fi
 
+mkdir -p res/values
+
 cat > res/values/strings.xml << EOF
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
